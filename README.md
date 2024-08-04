@@ -174,14 +174,14 @@ PR을 만들 때 이 템플릿을 사용해 주세요. 관련된 이슈를 자�
 
 #### 네이버 코드 포매터 XML 다운로드
 
-네이버 코드 포매터 XML 파일을 다운로드합니다.
+네이버 코드 포매터 XML 파일을 [다운로드](https://github.com/naver/hackday-conventions-java/blob/master/rule-config/naver-intellij-formatter.xml)합니다.
 
 #### IntelliJ에 XML 파일 가져오기
 
 1. IntelliJ를 열고, 상단 메뉴에서 `File > Settings` (또는 `Preferences` on macOS)를 클릭합니다.
 2. `Editor > Code Style > Java`로 이동합니다.
-3. 우측 상단의 톱니바퀴 버튼을 클릭하고, `Import Scheme > Eclipse XML profile`을 선택합니다.
-4. 다운로드한 `naver-eclipse-formatter.xml` 파일을 선택합니다.
+3. 우측 상단의 톱니바퀴 버튼을 클릭하고, `Import Scheme > IntelliJ IDEA Code Style XML`을 선택합니다.
+4. 다운로드한 `rule-config/naver-intellij-formatter.xml` 파일을 선택합니다.
 
 #### 코드 스타일 설정 적용
 
