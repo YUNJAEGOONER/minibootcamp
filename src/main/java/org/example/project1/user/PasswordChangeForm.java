@@ -1,0 +1,13 @@
+package org.example.project1.user;
+
+import jakarta.validation.constraints.NotEmpty;
+
+public record PasswordChangeForm(
+	@NotEmpty(message = "비밀번호는 필수항목입니다.")
+	String password1,
+
+	@NotEmpty(message = "비밀번호 확인은 필수항목입니다.")
+	String password2
+) {
+
+}
