@@ -19,6 +19,7 @@ public class UserService {
 		user.setPassword(passwordEncoder.encode(password));
 		userRepository.save(user);
 		return user;
+
 	}
 
 	public SiteUser getUser(String username) {
