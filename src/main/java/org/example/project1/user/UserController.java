@@ -76,6 +76,7 @@ public class UserController {
 
 		SiteUser user = userService.getUser(principal.getName());
 		userService.update(user, passwordChangeForm.password1());
-		return "redirect:/";
+
+		return "redirect:/user/logout";
 	}
 }

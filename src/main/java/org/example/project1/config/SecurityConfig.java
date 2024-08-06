@@ -28,7 +28,7 @@ public class SecurityConfig {
 					XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN)))
 			.formLogin((formLogin) -> formLogin
 				.loginPage("/user/login")
-				.defaultSuccessUrl("/question/list")
+				.defaultSuccessUrl("/home/main")
 			)
 			.logout((logout) -> logout
 				.logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
