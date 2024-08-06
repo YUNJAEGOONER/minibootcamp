@@ -7,14 +7,6 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item" sec:authorize="isAuthenticated()">
-                    <a class="nav-link" th:href="@{/home/main}">홈 버튼</a>
-                </li>
-
-                <li class="nav-item" sec:authorize="isAuthenticated()">
-                    <a class="nav-link" th:href="@{/question/list}">게시판 이동</a>
-                </li>
-
                 <li class="nav-item">
                     <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/user/logout}">로그아웃</a>
                 </li>
@@ -25,3 +17,28 @@
         </div>
     </div>
 </nav>
+
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">-->
+<!--<link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css"/>-->
+<!--<script src="https://cdn.tailwindcss.com"></script>-->
+
+<!--<ul class="flex bg-gray-200">-->
+<!--    <li class="text-center flex-1">-->
+<!--        <a class="text-center block rounded text-black-500 hover:bg-gray-300 py-2 px-4 flex flex-col items-center" href="#">-->
+<!--            <i class="fa-solid fa-bars"></i>-->
+<!--            <span class="text-xs">Board</span>-->
+<!--        </a>-->
+<!--    </li>-->
+<!--    <li class="text-center flex-1">-->
+<!--        <a class="text-center block rounded text-black-500 hover:bg-gray-300 py-2 px-4 flex flex-col items-center" href="#">-->
+<!--            <i class="fa-solid fa-house"></i>-->
+<!--            <span class="text-xs">Home</span>-->
+<!--        </a>-->
+<!--    </li>-->
+<!--    <li class="text-center flex-1">-->
+<!--        <a class="text-center block rounded text-black-500 hover:bg-gray-300 py-2 px-4 flex flex-col items-center" href="#">-->
+<!--            <i class="fa-solid fa-user"></i>-->
+<!--            <span class="text-xs">My</span>-->
+<!--        </a>-->
+<!--    </li>-->
+<!--</ul>-->

@@ -9,19 +9,58 @@
     <!-- sbb CSS -->
     <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
-    
+
     <title>Hello, sbb!</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 추가 스타일 -->
+    <style>
+        .fixed-bottom {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            z-index: 1000; /* 우선순위를 높여 다른 요소 위에 표시되도록 함 */
+        }
+    </style>
 </head>
 <body>
 <div th:replace="~{navbar :: navbarFragment}"></div>
 <!-- 기본 템플릿 안에 삽입될 내용 Start -->
 <th:block layout:fragment="content"></th:block>
 <!-- 기본 템플릿 안에 삽입될 내용 End -->
+
 <!-- Bootstrap JS -->
 <script th:src="@{/bootstrap.min.js}"></script>
 <!-- 자바스크립트 Start -->
 <th:block layout:fragment="script"></th:block>
 <!-- 자바스크립트 End -->
 <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+<link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css"/>
+
+<!-- 고정된 하단 내비게이션 바 -->
+<ul class="fixed-bottom flex bg-gray-200">
+    <li class="text-center flex-1">
+        <a class="text-center block rounded text-black-500 hover:bg-gray-300 py-2 px-4 flex flex-col items-center" href="/question/list">
+            <i class="fa-solid fa-bars"></i>
+            <span class="text-xs">Board</span>
+        </a>
+    </li>
+    <li class="text-center flex-1">
+        <a class="text-center block rounded text-black-500 hover:bg-gray-300 py-2 px-4 flex flex-col items-center" href="/home/main">
+            <i class="fa-solid fa-house"></i>
+            <span class="text-xs">Home</span>
+        </a>
+    </li>
+    <li class="text-center flex-1">
+        <a class="text-center block rounded text-black-500 hover:bg-gray-300 py-2 px-4 flex flex-col items-center" href="/user/mypage">
+            <i class="fa-solid fa-user"></i>
+            <span class="text-xs">My</span>
+        </a>
+    </li>
+</ul>
+
 </body>
 </html>
+
