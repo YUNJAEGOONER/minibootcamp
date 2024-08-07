@@ -31,6 +31,10 @@
 <!--테일윈드-->
 <script src="https://cdn.tailwindcss.com"></script>
 
+<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+<h1 th:href="@{https://github.com/PNU-2024-07-TEAM2}" style="display: flex; justify-content: center;" target="_blank">
+    <img th:src="@{/images/ourapp.png}" alt="My advertisement" width="65%">
+</h1>
 <main class="flex-grow flex items-center justify-center">
     <script>
         function submitLoginForm(form) {
@@ -52,6 +56,11 @@
             form.submit();
         }
     </script>
+
+<!--    <a th:href="@{https://github.com/PNU-2024-07-TEAM2}" style="display: flex; justify-content: center;" target="_blank">-->
+<!--        <img th:src="@{/images/my_ad.gif}" alt="My advertisement" width="35%">-->
+<!--    </a>-->
+
 
     <form th:action="@{/user/login}" method="post" class="w-full max-w-md grid grid-cols-1 gap-4"
           onsubmit="submitLoginForm(this); return false;">
@@ -84,3 +93,4 @@
 
     </form>
 </main>
+</div>
