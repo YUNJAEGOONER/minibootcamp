@@ -5,6 +5,7 @@ import java.security.Principal;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.Mapping;
@@ -83,7 +84,9 @@ public class UserController {
 
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/mypage")
-	public String mypage(){
+	public String mypage(Principal principal, Model model){
+		SiteUser user = userService.getUser(principal.getName());
+		model.addAttribute("current_user", user);
 		return "my_page";
 	}
 

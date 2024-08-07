@@ -1,4 +1,4 @@
-<html layout:decorate="~{layout}">
+ <html layout:decorate="~{layout}">
 <div layout:fragment="content" class="container my-3">
     <!--폰트어썸 아이콘-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
@@ -6,6 +6,7 @@
     <!--데이지 UI-->    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css"/>
     <!--테일윈드-->
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="import" href="question_list.html">
 
     <main class="flex flex-grow flex-col items-center justify-center w-full">
         <script>
@@ -13,18 +14,18 @@
 
         <div class="w-full max-w-md mt-20">
             <div class="flex items-center">
-                <!--todo: 프로필 사진 설정 기능 추가?-->
                 <button class="items-center">
                     <i class="fa-solid fa-circle-user fa-7x"></i>
                 </button>
                 <div class="pl-10 items-center">
-                    <!-- todo: 사용자 아이디 추가 -->
-                    <span class="text-xl font-bold"></span>
-                    <form th:action method="GET" class="m-0">
-                        <button type="button" class="btn mt-2 text-xs font-semibold flex items-center">
-                            계정 정보
-                        </button>
-                    </form>
+
+                    <span class="text-xl font-bold" th:text="${current_user.username}"></span>
+                    <p class="text" th:text="${current_user.email}"></p>
+<!--                    <form th:action method="GET" class="m-0">-->
+<!--                        <button type="button" class="btn mt-2 text-xs font-semibold flex items-center">-->
+<!--                            계정 정보-->
+<!--                        </button>-->
+<!--                    </form>-->
                 </div>
             </div>
         </div>
@@ -32,43 +33,38 @@
         <div class="w-full max-w-md mt-8">
             <div class="flex items-center justify-between p-2 border-b">
                 <span class="font-semibold">내가 쓴 글</span>
-                <form th:action method="GET" class="items-center m-0">
-                    <button type="button" class="font-semibold flex items-center">
-                        더보기
-                        <i class="fa-solid fa-angle-right"></i>
-                    </button>
-                </form>
+                <a th:href="@{/question/list(kw=${current_user.username}, page=0)}" class="font-semibold flex items-center">
+                    더보기
+                    <i class="fa-solid fa-angle-right"></i>
+                </a>
+
+
             </div>
             <div class="w-full">
                 <table class="table">
                     <tbody>
                     <!-- todo: 내가 쓴 글 5개 띄우기 -->
                     <tr class="hover">
-                        <td>카테고리1</td>
                         <td>제목1</td>
                         <td>추천수</td>
                         <td>댓글수</td>
                     </tr>
                     <tr class="hover">
-                        <td>카테고리2</td>
                         <td>제목2</td>
                         <td>추천수</td>
                         <td>댓글수</td>
                     </tr>
                     <tr class="hover">
-                        <td>카테고리3</td>
                         <td>제목3</td>
                         <td>추천수</td>
                         <td>댓글수</td>
                     </tr>
                     <tr class="hover">
-                        <td>카테고리4</td>
                         <td>제목4</td>
                         <td>추천수</td>
                         <td>댓글수</td>
                     </tr>
                     <tr class="hover">
-                        <td>카테고리5</td>
                         <td>제목5</td>
                         <td>추천수</td>
                         <td>댓글수</td>
@@ -78,54 +74,49 @@
             </div>
         </div>
 
-        <div class="w-full max-w-md mt-8">
-            <div class="flex items-center justify-between p-2 border-b">
-                <span class="font-semibold">댓글 단 글</span>
-                <form th:action method="GET" class="items-center m-0">
-                    <button type="button" class="font-semibold flex items-center">
-                        더보기
-                        <i class="fa-solid fa-angle-right"></i>
-                    </button>
-                </form>
-            </div>
-            <div class="w-full">
-                <table class="table">
-                    <tbody>
-                    <!-- todo: 댓글 단 글 5개 띄우기 -->
-                    <tr class="hover">
-                        <td>카테고리1</td>
-                        <td>제목1</td>
-                        <td>추천수</td>
-                        <td>댓글수</td>
-                    </tr>
-                    <tr class="hover">
-                        <td>카테고리2</td>
-                        <td>제목2</td>
-                        <td>추천수</td>
-                        <td>댓글수</td>
-                    </tr>
-                    <tr class="hover">
-                        <td>카테고리3</td>
-                        <td>제목3</td>
-                        <td>추천수</td>
-                        <td>댓글수</td>
-                    </tr>
-                    <tr class="hover">
-                        <td>카테고리4</td>
-                        <td>제목4</td>
-                        <td>추천수</td>
-                        <td>댓글수</td>
-                    </tr>
-                    <tr class="hover">
-                        <td>카테고리5</td>
-                        <td>제목5</td>
-                        <td>추천수</td>
-                        <td>댓글수</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+<!--        <div class="w-full max-w-md mt-8">-->
+<!--            <div class="flex items-center justify-between p-2 border-b">-->
+<!--                <span class="font-semibold">댓글 단 글</span>-->
+<!--                <form th:action method="GET" class="items-center m-0">-->
+<!--                    <button type="button" class="font-semibold flex items-center">-->
+<!--                        더보기-->
+<!--                        <i class="fa-solid fa-angle-right"></i>-->
+<!--                    </button>-->
+<!--                </form>-->
+<!--            </div>-->
+<!--            <div class="w-full">-->
+<!--                <table class="table">-->
+<!--                    <tbody>-->
+<!--                    &lt;!&ndash; todo: 댓글 단 글 5개 띄우기 &ndash;&gt;-->
+<!--                    <tr class="hover">-->
+<!--                        <td>제목1</td>-->
+<!--                        <td>추천수</td>-->
+<!--                        <td>댓글수</td>-->
+<!--                    </tr>-->
+<!--                    <tr class="hover">-->
+<!--                        <td>제목2</td>-->
+<!--                        <td>추천수</td>-->
+<!--                        <td>댓글수</td>-->
+<!--                    </tr>-->
+<!--                    <tr class="hover">-->
+<!--                        <td>제목3</td>-->
+<!--                        <td>추천수</td>-->
+<!--                        <td>댓글수</td>-->
+<!--                    </tr>-->
+<!--                    <tr class="hover">-->
+<!--                        <td>제목4</td>-->
+<!--                        <td>추천수</td>-->
+<!--                        <td>댓글수</td>-->
+<!--                    </tr>-->
+<!--                    <tr class="hover">-->
+<!--                        <td>제목5</td>-->
+<!--                        <td>추천수</td>-->
+<!--                        <td>댓글수</td>-->
+<!--                    </tr>-->
+<!--                    </tbody>-->
+<!--                </table>-->
+<!--            </div>-->
+<!--        </div>-->
 </div>
 </main>
 </div>
