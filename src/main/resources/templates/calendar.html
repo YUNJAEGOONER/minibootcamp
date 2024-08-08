@@ -1,0 +1,38 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container my-3">
+    <!--폰트어썸 아이콘-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <!-- 아이콘 목록 : https://fontawesome.com/search?o=r&m=free -->
+    <!--데이지 UI-->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css"/>
+    <!--테일윈드-->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <form th:object="${scheduleForm}" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+        <div th:replace="~{form_errors :: formErrorsFragment}"></div>
+        <div class="mb-3">
+            <label for="title" class="form-label">제목</label>
+            <input type="text" th:field="*{title}" class="form-control">
+            <label for="startDate">시작시간</label>
+            <input type="datetime-local"
+                   id="startDate"
+                   max="2077-06-20T21:00"
+                   min="2077-06-05T12:30"
+                   value="2077-06-15T13:27"
+                   th:field="*{startDate}"
+                   class="form-control">
+            <label for="endDate">종료시간</label>
+            <input type="datetime-local"
+                   id="startDate"
+                   max="2077-06-20T21:00"
+                   min="2077-06-05T12:30"
+                   value="2077-06-15T13:27"
+                   th:field="*{endDate}"
+                   class="form-control">
+        </div>
+        <input type="submit" value="제출" class="btn bg-black text-white w-full">
+    </form>
+</div>
+</html>
+
