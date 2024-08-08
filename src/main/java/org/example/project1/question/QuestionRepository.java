@@ -35,4 +35,7 @@ public interface QuestionRepository extends JpaRepository<Question, Integer> {
 		+ "   or a.content like %:kw% "
 		+ "   or u2.username like %:kw% ")
 	Page<Question> findAllByKeyword(@Param("kw") String kw, Pageable pageable);
+
+	@Query("SELECT q FROM Question q WHERE SIZE(q.voter) > :voterCount")
+	Page<Question> findByVoterCountGreaterThan(int voterCount, Pageable pageable);
 }

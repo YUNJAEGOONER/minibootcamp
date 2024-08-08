@@ -61,4 +61,28 @@ public class QuestionService {
 		question.getVoter().add(siteUser);
 		this.questionRepository.save(question);
 	}
+
+	public Page<Question> getTop5HotList() {
+		Sort sort = Sort.by(Sort.Direction.DESC, "createDate");
+		Pageable pageable = PageRequest.of(0, 5, sort);
+		Page<Question> questions = questionRepository.findByVoterCountGreaterThan(0, pageable);
+		return questions;
+		// return questions.stream()
+		// 	.map(question ->
+		// 		new HotQuestionDto(
+		// 			question.getId(),
+		// 			question.getSubject(),
+		// 			(long)question.getVoter().size(),
+		// 			(long)question.getAnswerList().size()
+		// 		)
+		// 	).toList();
+	}
+
+	public record HotQuestionDto(
+		Integer questionId,
+		String subject,
+		Long recommendCount,
+		Long commentCount
+	) {
+	}
 }
