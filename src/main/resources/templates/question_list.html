@@ -1,11 +1,82 @@
+<!DOCTYPE html>
 <html layout:decorate="~{layout}">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-<!-- 아이콘 목록 : https://fontawesome.com/search?o=r&m=free -->
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .table td, .table th {
+            padding: 0.5rem;
+            vertical-align: middle;
+            word-wrap: break-word;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
 
+        .hoverable:hover {
+            cursor: pointer;
+        }
 
+        .word_title_main {
+            font-size: 0.9rem;
+        }
+
+        .text-sm {
+            font-size: 0.8rem;
+        }
+
+        .pagination {
+            margin: 0; /* Ensure pagination doesn't add extra margin */
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        .w-full {
+            width: 100%;
+        }
+
+        .border-collapse {
+            border-collapse: collapse;
+        }
+
+        .w-1/2 {
+            width: 50%;
+        }
+
+        .text-start {
+            text-align: left;
+        }
+
+        .flex {
+            display: flex;
+        }
+
+        .justify-content-between {
+            justify-content: space-between;
+        }
+
+        .flex-wrap {
+            flex-wrap: wrap;
+        }
+
+        .d-flex {
+            display: flex;
+        }
+
+        .align-items-center {
+            align-items: center;
+        }
+
+        .justify-content-center {
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
 <div layout:fragment="content" class="container my-3">
     <div class="row my-3">
-
         <div class="col-6">
             <a th:href="@{/question/create}" class="btn bg-black text-white px-4 py-2">글 쓸래!</a>
         </div>
@@ -16,101 +87,71 @@
                 <button class="btn btn-outline-secondary" type="button" id="btn_search">찾기</button>
             </div>
         </div>
-
     </div>
-    <table class="table">
-        <thead class="table-dark">
-        <tr class="text-center">
-            <th>번호</th>
-            <th style="width:90%">게시글</th>
-<!--            <th>글쓴이</th>-->
-<!--            <th>작성일시</th>-->
-        </tr>
-        </thead>
-        <tbody>
-        <tr class="text-center" th:each="question, loop : ${paging}">
-            <td th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index}"></td>
 
-            <td class="text-start">
-                <div class="hoverable" th:onclick="|location.href='@{|/question/detail/${question.id}|}'|">
-                    <div>
-<!--                        <b><a th:href="@{|/question/detail/${question.id}|}" th:utext="${question.subject}"></a></b>-->
-                        <strong><p class="word_title_main" th:utext="${question.subject}"></p></strong>
-<!--                        <span class="text-danger small ms-2" th:if="${#lists.size(question.answerList) > 0}"-->
-<!--                              th:text="${#lists.size(question.answerList)}">-->
-<!--                        </span>-->
-                    </div>
-<!--                    <div class="flex">-->
-<!--                        <span th:text="${question.content}"></span>-->
-<!--                        <div class="w-1/2 p-4"></div>-->
-<!--                        <div class="w-1/2 p-4 flex justify-around">-->
-<!--                            <span class="text-sm w-1/3 text-center">추천수</span>-->
-<!--                            <span class="text-sm w-1/3 text-center">댓글수</span>-->
-<!--                            <span class="text-sm w-1/3 text-center">올린시간</span>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-                    <table class="w-full border-collapse">
-                        <tr>
-                            <!-- 왼쪽 구역: content (패딩 없음) -->
-                            <td class="w-1/2" style="line-height: 1.2; padding: 8px 0;">
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead class="table-dark">
+            <tr class="text-center">
+                <th>번호</th>
+                <th style="width:90%">게시글</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="text-center" th:each="question, loop : ${paging}">
+                <td th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index}"></td>
+                <td class="text-start">
+                    <div class="hoverable" th:onclick="|location.href='@{/question/detail/${question.id}}'|">
+                        <div>
+                            <strong><p class="word_title_main" th:utext="${question.subject}"></p></strong>
+                        </div>
+                        <div class="d-flex justify-content-between flex-wrap">
+                            <div style="line-height: 1.2; padding: 8px 0; max-width: 200px;">
                                 <span class="word" th:text="${question.content}"></span>
-                            </td>
+                            </div>
+                            <div class="d-flex align-items-center flex-wrap" style="padding: 8px 0;">
+                                <div class="text-sm text-center" style="padding: 0 8px;">
+                                    <a th:data-uri="@{|/question/vote/${question.id}|}">
+                                        <i class="fa-regular fa-heart"></i>
+                                        <span th:text="${#lists.size(question.voter)}"></span>
+                                    </a>
+                                </div>
+                                <div class="text-sm text-center" style="padding: 0 8px;">
+                                    <a th:data-uri="@{|/question/vote/${question.id}|}">
+                                        <i class="fa-regular fa-comment"></i>
+                                        <span th:text="|${#lists.size(question.answerList)}|"></span>
+                                    </a>
+                                </div>
+                                <div class="text-sm text-center" style="padding: 0 8px;">
+                                    <a th:data-uri="@{|/question/vote/${question.id}|}">
+                                        <span th:text="${#temporals.format(question.createDate, 'yyyy-MM-dd HH:mm')}"></span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 
-                            <!-- 오른쪽 구역: 추천수, 댓글수, 올린시간 -->
-                            <td class="w-1/2">
-                                <table class="w-full">
-                                    <tr>
-                                        <td class="text-sm w-1/3 text-center" style="padding: 8px 0;">
-<!--                                            <span class="text-danger small ms-2" th:if="${#lists.size(question.answerList) > 0}"-->
-<!--                                                  th:text="${#lists.size(question.answerList)}">-->
-<!--                                            </span>-->
-                                            <a th:data-uri="@{|/question/vote/${question.id}|}">
-                                                <i class="fa-regular fa-heart"></i>
-                                                <span th:text="${#lists.size(question.voter)}"></span>
-                                            </a>
-                                        </td>
-                                        <td class="text-sm w-1/3 text-center" style="padding: 8px 0;">
-                                            <a th:data-uri="@{|/question/vote/${question.id}|}">
-                                                <i class="fa-regular fa-comment"></i>
-                                                <span th:text="|${#lists.size(question.answerList)}|"></span>
-                                            </a>
-                                        </td>
-                                        <td class="text-sm w-1/3 text-center" style="padding: 8px 0;">
-                                            <a th:data-uri="@{|/question/vote/${question.id}|}">
-                                                <span th:text="${#temporals.format(question.createDate, 'yyyy-MM-dd HH:mm')}"></span>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-                    </table>
-
-            </td>
-<!--            <td><span th:if="${question.author != null}" th:text="${question.author.username}"></span></td>-->
-<!--            <td th:text="${#temporals.format(question.createDate, 'yyyy-MM-dd HH:mm')}"></td>-->
-        </tr>
-        </tbody>
-    </table>
     <!-- 페이징처리 시작 -->
     <div th:if="${!paging.isEmpty()}">
         <ul class="pagination justify-content-center">
-            <li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled'">
-                <a class="page-link" href="javascript:void(0)" th:data-page="${paging.number-1}">
+            <li class="page-item" th:classappend="${!paging.hasPrevious()} ? 'disabled'">
+                <a class="page-link" href="javascript:void(0)" th:data-page="${paging.number - 1}">
                     <span><i class="fa-solid fa-angle-left"></i></span>
                 </a>
             </li>
-            
-            <li th:each="page: ${#numbers.sequence(0, paging.totalPages-1)}"
-                th:if="${page >= paging.number-5 and page <= paging.number+5}"
+            <li th:each="page: ${#numbers.sequence(0, paging.totalPages - 1)}"
+                th:if="${page >= paging.number - 5 and page <= paging.number + 5}"
                 th:classappend="${page == paging.number} ? 'active'"
-                class="page-item" >
-                <a th:text="${page}" class="page-link" href="javascript:void(0)" th:data-page="${page}"></a>
+                class="page-item">
+                <a th:text="${page + 1}" class="page-link" href="javascript:void(0)" th:data-page="${page}"></a>
             </li>
-
-            <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">
-                <a class="page-link" href="javascript:void(0)" th:data-page="${paging.number+1}">
+            <li class="page-item" th:classappend="${!paging.hasNext()} ? 'disabled'">
+                <a class="page-link" href="javascript:void(0)" th:data-page="${paging.number + 1}">
                     <span><i class="fa-solid fa-angle-right"></i></span>
                 </a>
             </li>
@@ -122,29 +163,37 @@
         <input type="hidden" id="page" name="page" th:value="${paging.number}">
     </form>
 </div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script layout:fragment="script" type='text/javascript'>
-    const page_elements = document.getElementsByClassName("page-link");
-    Array.from(page_elements).forEach(function (element) {
-        element.addEventListener('click', function () {
-            document.getElementById('page').value = this.dataset.page;
+    document.addEventListener('DOMContentLoaded', function () {
+        const page_elements = document.querySelectorAll(".page-link");
+        page_elements.forEach(function (element) {
+            element.addEventListener('click', function () {
+                const page = this.getAttribute('data-page');
+                document.getElementById('page').value = page;
+                document.getElementById('searchForm').submit();
+            });
+        });
+
+        const btn_search = document.getElementById("btn_search");
+        btn_search.addEventListener('click', function () {
+            document.getElementById('kw').value = document.getElementById('search_kw').value;
+            document.getElementById('page').value = 0;  // 검색버튼을 클릭할 경우 0페이지부터 조회한다.
             document.getElementById('searchForm').submit();
         });
-    });
-    const btn_search = document.getElementById("btn_search");
-    btn_search.addEventListener('click', function () {
-        document.getElementById('kw').value = document.getElementById('search_kw').value;
-        document.getElementById('page').value = 0;  // 검색버튼을 클릭할 경우 0페이지부터 조회한다.
-        document.getElementById('searchForm').submit();
-    });
 
-    const search_kw = document.getElementById("search_kw");
-    search_kw.addEventListener('keypress', function (e) {
-        if (e.key === 'Enter') {
-            e.preventDefault();  // 엔터키로 인한 기본 폼 제출 방지
-            document.getElementById('kw').value = document.getElementById('search_kw').value;
-            document.getElementById('page').value = 0;  // 검색 시 0페이지부터 조회한다.
-            document.getElementById('searchForm').submit();
-        }
+        const search_kw = document.getElementById("search_kw");
+        search_kw.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();  // 엔터키로 인한 기본 폼 제출 방지
+                document.getElementById('kw').value = document.getElementById('search_kw').value;
+                document.getElementById('page').value = 0;  // 검색 시 0페이지부터 조회한다.
+                document.getElementById('searchForm').submit();
+            }
+        });
     });
 </script>
+</body>
 </html>
