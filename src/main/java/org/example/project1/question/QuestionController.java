@@ -114,4 +114,14 @@ public class QuestionController {
 		this.questionService.vote(question, siteUser);
 		return String.format("redirect:/question/detail/%s", id);
 	}
+
+	@PreAuthorize("isAuthenticated()")
+	@GetMapping("/mypage")
+	public String mypage(Principal principal, Model model){
+		SiteUser user = userService.getUser(principal.getName());
+		model.addAttribute("current_user", user);
+		Page<Question> paging = this.questionService.getList(0, user.getUsername());
+		model.addAttribute("my_question", paging);
+		return "my_page";
+	}
 }

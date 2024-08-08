@@ -82,13 +82,13 @@ public class UserController {
 		return "redirect:/user/logout";
 	}
 
-	@PreAuthorize("isAuthenticated()")
-	@GetMapping("/mypage")
-	public String mypage(Principal principal, Model model){
-		SiteUser user = userService.getUser(principal.getName());
-		model.addAttribute("current_user", user);
-		return "my_page";
-	}
+	// @PreAuthorize("isAuthenticated()")
+	// @GetMapping("/mypage")
+	// public String mypage(Principal principal, Model model){
+	// 	SiteUser user = userService.getUser(principal.getName());
+	// 	model.addAttribute("current_user", user);
+	// 	return "my_page";
+	// }
 
 
 }
