@@ -1,14 +1,12 @@
 <!DOCTYPE html>
 <html layout:decorate="~{layout}">
 <head>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         .table td, .table th {
             padding: 0.5rem;
             vertical-align: middle;
             word-wrap: break-word;
-            white-space: nowrap;
+            white-space: normal; /* nowrap에서 normal로 변경하여 줄바꿈 허용 */
             overflow: hidden;
             text-overflow: ellipsis;
         }
@@ -27,10 +25,39 @@
 
         .pagination {
             margin: 0; /* Ensure pagination doesn't add extra margin */
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 1rem 0;
+        }
+
+        .pagination .page-item {
+            margin: 0 0.25rem;
+            flex: 0 0 auto;
+        }
+
+        .pagination .page-item .page-link {
+            padding: 0.5rem 0.75rem;
+            border: 1px solid #dee2e6;
+            border-radius: 0.25rem;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .pagination .page-item.disabled .page-link {
+            color: #6c757d;
+            pointer-events: none;
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: #007bff;
+            border-color: #007bff;
+            color: white;
         }
 
         .table-responsive {
-            overflow-x: auto;
+            overflow-x: auto; /* 좌우 스크롤을 허용하기 */
+            -webkit-overflow-scrolling: touch; /* 모바일 장치에서 더 나은 스크롤 경험을 위해 추가 */
         }
 
         .w-full {
@@ -72,6 +99,29 @@
         .justify-content-center {
             justify-content: center;
         }
+
+        @media (max-width: 576px) {
+            .table td, .table th {
+                font-size: 0.8rem; /* 작은 화면에서 폰트 크기 줄이기 */
+            }
+
+            .word_title_main {
+                white-space: normal; /* 작은 화면에서 줄바꿈 허용 */
+            }
+
+            .pagination {
+                flex-wrap: wrap;
+            }
+
+            .pagination .page-item {
+                margin: 0.1rem;
+            }
+
+            .pagination .page-item .page-link {
+                padding: 0.4rem 0.6rem;
+                font-size: 0.8rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -90,23 +140,23 @@
     </div>
 
     <div class="table-responsive">
-        <table class="table table-bordered">
+        <table class="table table-bordered w-full">
             <thead class="table-dark">
             <tr class="text-center">
                 <th>번호</th>
-                <th style="width:90%">게시글</th>
+                <th>게시글</th>
             </tr>
             </thead>
             <tbody>
             <tr class="text-center" th:each="question, loop : ${paging}">
                 <td th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index}"></td>
                 <td class="text-start">
-                    <div class="hoverable" th:onclick="|location.href='@{/question/detail/${question.id}}'|">
+                    <div class="hoverable" th:onclick="|location.href='@{/question/detail/{id}(id=${question.id})}'|">
                         <div>
                             <strong><p class="word_title_main" th:utext="${question.subject}"></p></strong>
                         </div>
                         <div class="d-flex justify-content-between flex-wrap">
-                            <div style="line-height: 1.2; padding: 8px 0; max-width: 200px;">
+                            <div style="line-height: 1.2; padding: 8px 0;">
                                 <span class="word" th:text="${question.content}"></span>
                             </div>
                             <div class="d-flex align-items-center flex-wrap" style="padding: 8px 0;">
@@ -138,7 +188,7 @@
 
     <!-- 페이징처리 시작 -->
     <div th:if="${!paging.isEmpty()}">
-        <ul class="pagination justify-content-center">
+        <ul class="pagination">
             <li class="page-item" th:classappend="${!paging.hasPrevious()} ? 'disabled'">
                 <a class="page-link" href="javascript:void(0)" th:data-page="${paging.number - 1}">
                     <span><i class="fa-solid fa-angle-left"></i></span>
@@ -163,9 +213,6 @@
         <input type="hidden" id="page" name="page" th:value="${paging.number}">
     </form>
 </div>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script layout:fragment="script" type='text/javascript'>
     document.addEventListener('DOMContentLoaded', function () {
         const page_elements = document.querySelectorAll(".page-link");

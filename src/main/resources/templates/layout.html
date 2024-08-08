@@ -21,6 +21,7 @@
             width: 100%;
             z-index: 1000; /* 우선순위를 높여 다른 요소 위에 표시되도록 함 */;
         }
+
         .fixed-bottom2 {
             bottom: 0;
             width: 100%;
@@ -79,6 +80,42 @@
 
 <div style="height: 45px"></div>
 
+<div>
+    <ul class="fixed-bottom container-fluid flex bg-gray-200">
+        <li class="text-center flex-1">
+            <a class="text-center block rounded text-black-500 hover:bg-gray-300 py-2 px-4 flex flex-col items-center"
+               href="/question/list">
+                <i class="fa-solid fa-bars"></i>
+                <span class="text-xs">Board</span>
+            </a>
+        </li>
+
+        <li class="text-center flex-1">
+            <a class="text-center block rounded text-black-500 hover:bg-gray-300 py-2 px-4 flex flex-col items-center"
+               href="/home/main">
+                <i class="fa-solid fa-house"></i>
+                <span class="text-xs">Home</span>
+            </a>
+        </li>
+
+        <li class="text-center flex-1">
+            <a class="text-center block rounded text-black-500 hover:bg-gray-300 py-2 px-4 flex flex-col items-center"
+               href="/question/mypage">
+                <i class="fa-solid fa-user"></i>
+                <span class="text-xs">My</span>
+            </a>
+        </li>
+
+        <li class="text-center flex-1">
+            <a class="text-center block rounded text-black-500 hover:bg-gray-300 py-2 px-4 flex flex-col items-center"
+               href="/question/calendar">
+                <i class="fa-solid fa-calendar"></i>
+                <span class="text-xs">Calendar</span>
+            </a>
+        </li>
+    </ul>
+</div>
+
 <!-- 기본 템플릿 안에 삽입될 내용 End -->
 
 <!-- Bootstrap JS -->
@@ -92,29 +129,5 @@
 <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css"/>
 
 
-<div>
-<!-- 고정된 하단 내비게이션 바 -->
-<ul class="fixed-bottom flex bg-gray-200">
-    <li class="text-center flex-1">
-        <a class="text-center block rounded text-black-500 hover:bg-gray-300 py-2 px-4 flex flex-col items-center" href="/question/list">
-            <i class="fa-solid fa-bars"></i>
-            <span class="text-xs">Board</span>
-        </a>
-    </li>
-    <li class="text-center flex-1">
-        <a class="text-center block rounded text-black-500 hover:bg-gray-300 py-2 px-4 flex flex-col items-center" href="/home/main">
-            <i class="fa-solid fa-house"></i>
-            <span class="text-xs">Home</span>
-        </a>
-    </li>
-    <li class="text-center flex-1">
-        <a class="text-center block rounded text-black-500 hover:bg-gray-300 py-2 px-4 flex flex-col items-center" href="/question/mypage">
-            <i class="fa-solid fa-user"></i>
-            <span class="text-xs">My</span>
-        </a>
-    </li>
-</ul>
-</div>
 </body>
 </html>
-
