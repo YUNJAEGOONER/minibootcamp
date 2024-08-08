@@ -35,7 +35,7 @@
                 <div class="hoverable" th:onclick="|location.href='@{|/question/detail/${question.id}|}'|">
                     <div>
 <!--                        <b><a th:href="@{|/question/detail/${question.id}|}" th:utext="${question.subject}"></a></b>-->
-                        <strong><p th:utext="${question.subject}"></p></strong>
+                        <strong><p class="word_title_main" th:utext="${question.subject}"></p></strong>
 <!--                        <span class="text-danger small ms-2" th:if="${#lists.size(question.answerList) > 0}"-->
 <!--                              th:text="${#lists.size(question.answerList)}">-->
 <!--                        </span>-->

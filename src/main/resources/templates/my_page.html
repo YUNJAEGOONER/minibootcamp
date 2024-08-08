@@ -22,11 +22,11 @@
 
                     <span class="text-xl font-bold" th:text="${current_user.username}"></span>
                     <p class="text" th:text="${current_user.email}"></p>
-                    <!--                    <form th:action method="GET" class="m-0">-->
-                    <!--                        <button type="button" class="btn mt-2 text-xs font-semibold flex items-center">-->
-                    <!--                            계정 정보-->
-                    <!--                        </button>-->
-                    <!--                    </form>-->
+
+                    <button class="btn mt-2 text-xs font-semibold flex items-center" sec:authorize="isAuthenticated()">
+                        <a class="nav-link" th:href="@{/user/change/password}">비밀번호 변경</a>
+                    </button>
+
                 </div>
             </div>
         </div>
@@ -42,84 +42,29 @@
 
 
             </div>
-            <div class="w-full">
-                <table class="table">
+            <div class="w-full border-collapse" th:each="question, loop : ${my_question}">
+                <table class="table" >
                     <tbody>
                     <!-- todo: 내가 쓴 글 5개 띄우기 -->
-                    <tr class="hover">
-                        <td>제목1</td>
-                        <td>추천수</td>
-                        <td>댓글수</td>
-                    </tr>
-                    <tr class="hover">
-                        <td>제목2</td>
-                        <td>추천수</td>
-                        <td>댓글수</td>
-                    </tr>
-                    <tr class="hover">
-                        <td>제목3</td>
-                        <td>추천수</td>
-                        <td>댓글수</td>
-                    </tr>
-                    <tr class="hover">
-                        <td>제목4</td>
-                        <td>추천수</td>
-                        <td>댓글수</td>
-                    </tr>
-                    <tr class="hover">
-                        <td>제목5</td>
-                        <td>추천수</td>
-                        <td>댓글수</td>
+                    <tr th:onclick="|location.href='@{|/question/detail/${question.id}|}'|">
+                        </b><td class="w-1/2 word_title" th:utext="${question.subject}"></td>
+
+                        <td class="w-1/4">
+                                <i class="fa-regular fa-heart"></i>
+                                <span th:text="${#lists.size(question.voter)}"></span>
+                        </td>
+
+                        <td class="w-1/4">
+                                <i class="fa-regular fa-comment"></i>
+                                <span th:text="|${#lists.size(question.answerList)}|"></span>
+                        </td>
+
                     </tr>
                     </tbody>
                 </table>
+
             </div>
         </div>
-
-        <!--        <div class="w-full max-w-md mt-8">-->
-        <!--            <div class="flex items-center justify-between p-2 border-b">-->
-        <!--                <span class="font-semibold">댓글 단 글</span>-->
-        <!--                <form th:action method="GET" class="items-center m-0">-->
-        <!--                    <button type="button" class="font-semibold flex items-center">-->
-        <!--                        더보기-->
-        <!--                        <i class="fa-solid fa-angle-right"></i>-->
-        <!--                    </button>-->
-        <!--                </form>-->
-        <!--            </div>-->
-        <!--            <div class="w-full">-->
-        <!--                <table class="table">-->
-        <!--                    <tbody>-->
-        <!--                    &lt;!&ndash; todo: 댓글 단 글 5개 띄우기 &ndash;&gt;-->
-        <!--                    <tr class="hover">-->
-        <!--                        <td>제목1</td>-->
-        <!--                        <td>추천수</td>-->
-        <!--                        <td>댓글수</td>-->
-        <!--                    </tr>-->
-        <!--                    <tr class="hover">-->
-        <!--                        <td>제목2</td>-->
-        <!--                        <td>추천수</td>-->
-        <!--                        <td>댓글수</td>-->
-        <!--                    </tr>-->
-        <!--                    <tr class="hover">-->
-        <!--                        <td>제목3</td>-->
-        <!--                        <td>추천수</td>-->
-        <!--                        <td>댓글수</td>-->
-        <!--                    </tr>-->
-        <!--                    <tr class="hover">-->
-        <!--                        <td>제목4</td>-->
-        <!--                        <td>추천수</td>-->
-        <!--                        <td>댓글수</td>-->
-        <!--                    </tr>-->
-        <!--                    <tr class="hover">-->
-        <!--                        <td>제목5</td>-->
-        <!--                        <td>추천수</td>-->
-        <!--                        <td>댓글수</td>-->
-        <!--                    </tr>-->
-        <!--                    </tbody>-->
-        <!--                </table>-->
-        <!--            </div>-->
-        <!--        </div>-->
-        <!--</div>-->
     </main>
 </div>
 </html>

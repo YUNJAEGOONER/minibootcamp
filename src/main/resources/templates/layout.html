@@ -36,13 +36,33 @@
         }
 
         .word {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            word-wrap: break-word;
-            display: -webkit-box;
-            -webkit-line-clamp: 2 ;
-            -webkit-box-orient: vertical;
-            line-height: 1.2;
+            overflow: hidden; /* 넘치는 내용 숨기기 */
+            text-overflow: ellipsis; /* 생략 부호(...) 표시 */
+            display: -webkit-box; /* 박스 모델 설정 */
+            -webkit-box-orient: vertical; /* 수직 방향으로 정렬 */
+            -webkit-line-clamp: 2; /* 최대 두 줄로 제한 */
+            line-height: 1.2; /* 줄 높이 설정 */
+            max-width: calc(50ch + 1em); /* 30자 너비 + 여백 설정 */
+            width: calc(50ch + 1em); /* 30자 너비 + 여백 설정 */
+            word-wrap: break-word; /* 단어가 길 경우 줄 바꿈 */
+        }
+
+        .word_title {
+            overflow: hidden; /* 넘치는 내용 숨기기 */
+            text-overflow: ellipsis; /* 넘치는 내용에 대해 생략 부호(...) 표시 */
+            white-space: nowrap; /* 줄 바꿈 방지 */
+            width: 30ch; /* 10자 너비 */
+            max-width: 30ch; /* 최대 너비 10자로 제한 */
+            display: inline-block; /* inline-block으로 변경 */
+        }
+
+        .word_title_main {
+            overflow: hidden; /* 넘치는 내용 숨기기 */
+            text-overflow: ellipsis; /* 넘치는 내용에 대해 생략 부호(...) 표시 */
+            white-space: nowrap; /* 줄 바꿈 방지 */
+            width: 50ch; /* 10자 너비 */
+            max-width: 50ch; /* 최대 너비 10자로 제한 */
+            display: inline-block; /* inline-block으로 변경 */
         }
     </style>
 </head>
@@ -88,7 +108,7 @@
         </a>
     </li>
     <li class="text-center flex-1">
-        <a class="text-center block rounded text-black-500 hover:bg-gray-300 py-2 px-4 flex flex-col items-center" href="/user/mypage">
+        <a class="text-center block rounded text-black-500 hover:bg-gray-300 py-2 px-4 flex flex-col items-center" href="/question/mypage">
             <i class="fa-solid fa-user"></i>
             <span class="text-xs">My</span>
         </a>
