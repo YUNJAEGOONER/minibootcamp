@@ -21,7 +21,7 @@
         <table class="table">
             <tr th:each="question : ${questions}"
                 th:onclick="|location.href='@{|/question/detail/${question.id}|}'|">
-                <td class="text-sm w-1/3 text-center" style="padding: 8px 0;">
+                <td class="word_title text-sm w-1/3 text-center" style="padding: 8px 0;">
                     <a th:data-uri="@{|/question/vote/${question.id}|}">
                         <span th:text="${question.subject}"></span>
                     </a>
@@ -29,13 +29,13 @@
                 <td class="text-sm w-1/3 text-center" style="padding: 8px 0;">
                     <a th:data-uri="@{|/question/vote/${question.id}|}">
                         <i class="fa-regular fa-heart"></i>
-                        <span th:text="'추천수: ' + ${#lists.size(question.voter)}"></span>
+                        <span th:text="${#lists.size(question.voter)}"></span>
                     </a>
                 </td>
                 <td class="text-sm w-1/3 text-center" style="padding: 8px 0;">
                     <a th:data-uri="@{|/question/vote/${question.id}|}">
                         <i class="fa-regular fa-comment"></i>
-                        <span th:text="'댓글수: ' + ${#lists.size(question.answerList)}"></span>
+                        <span th:text="${#lists.size(question.answerList)}"></span>
                     </a>
                 </td>
             </tr>
