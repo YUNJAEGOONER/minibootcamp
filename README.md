@@ -1,5 +1,10 @@
 # project-1
 
+- [PDF 주소](https://drive.google.com/file/d/1IADaL4rhexEzt1_XuIwWTvji5OURbN-p/view?usp=sharing)
+- [유튜브 영상](https://youtu.be/W6tSslcCQOw)
+- [배포 도메인 주소](https://anytime.fly.dev/)
+
+
 ## 목차
 1. [개요](#개요)
 2. [작업 방식 (PM & 컨트리뷰터)](#작업-방식-pm--컨트리뷰터)
