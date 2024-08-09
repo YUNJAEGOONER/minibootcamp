@@ -1,6 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container my-3">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FullCalendar with Flatpickr Example</title>
@@ -25,223 +24,200 @@
     <!--테일윈드-->
     <script src="https://cdn.tailwindcss.com"></script>
 
-</head>
-<body>
-<div class="flex flex-col flex-grow items-center justify-center">
-    <!-- 달력 표시 영역 -->
-    <div id="calendar" class="flex w-full max-w-md mb-4 overflow-auto"></div>
 
-    <!-- + 버튼 눌렀을 때 + 버튼 사라지고 일정 입력 div가 뜨도록 js 구현 -->
-    <button id="addRecord" class="btn btn-circle">
-        <i class="fa-solid fa-plus"></i>
-    </button>
+    <div class="flex flex-col flex-grow items-center justify-center">
+        <!-- 달력 표시 영역 -->
+        <div id="calendar" class="flex w-full max-w-md mb-4 overflow-auto"></div>
 
-    <!-- 기록 추가 영역 (처음에는 숨김) -->
-    <div id="recordForm" class="hidden bg-white p-4 rounded shadow-md">
-        <h3 class="text-lg font-bold mb-4">일정 추가</h3>
-        <input id="record" type="text" placeholder="일정"
-               class="input input-bordered w-full border-gray-300 rounded-lg shadow-sm mb-4">
+        <!-- + 버튼 눌렀을 때 + 버튼 사라지고 일정 입력 div가 뜨도록 js 구현 -->
+        <button id="addRecord" class="btn btn-circle">
+            <i class="fa-solid fa-plus"></i>
+        </button>
 
-        <input id="dateRange" type="text" placeholder="날짜 범위"
-               class="input input-bordered w-full border-gray-300 rounded-lg shadow-sm mb-4">
+        <!-- 기록 추가 영역 (처음에는 숨김) -->
+        <div id="recordForm" class="hidden bg-white p-4 rounded shadow-md">
+            <h3 class="text-lg font-bold mb-4">일정 추가</h3>
+            <input id="record" type="text" placeholder="일정"
+                   class="input input-bordered w-full border-gray-300 rounded-lg shadow-sm mb-4">
 
-        <button id="saveRecord" class="bg-gray-100 py-2 px-4 rounded-lg">저장</button>
-        <button id="cancelRecord" class="bg-gray-100 py-2 px-4 rounded-lg ml-2">취소</button>
+            <input id="dateRange" type="text" placeholder="날짜 범위"
+                   class="input input-bordered w-full border-gray-300 rounded-lg shadow-sm mb-4">
+
+            <button id="saveRecord" class="bg-gray-100 py-2 px-4 rounded-lg">저장</button>
+            <button id="cancelRecord" class="bg-gray-100 py-2 px-4 rounded-lg ml-2">취소</button>
+        </div>
+
+        <!-- 모달 -->
+        <dialog id="my_modal" class="modal">
+            <div class="modal-box">
+                <form method="dialog">
+                    <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                </form>
+                <!-- 날짜, 요일 -->
+                <h2 id="modalDate" class="text-lg font-bold"></h2>
+
+                <ul id="modalList">
+                    <!-- js로 일정, 시간 <li> 추가 예정 -->
+                </ul>
+            </div>
+        </dialog>
     </div>
 
-    <!-- 모달 -->
-    <dialog id="my_modal" class="modal">
-        <div class="modal-box">
-            <form method="dialog">
-                <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-            </form>
-            <!-- 날짜, 요일 -->
-            <h2 id="modalDate" class="text-lg font-bold"></h2>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const calendarEl = document.getElementById('calendar');
+            calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                events: function (fetchInfo, successCallback, failureCallback) {
+                    fetch('/api/events')
+                        .then(response => response.json())
+                        .then(data => {
+                            const events = data.map(event => ({
+                                id: event.id,
+                                title: event.title,
+                                start: event.startDate,
+                                end: event.endDate
+                            }));
+                            successCallback(events);
+                        })
+                        .catch(error => {
+                            console.error('Error fetching events:', error);
+                            failureCallback(error);
+                        });
+                },
+                dateClick: function (info) {
+                    // Your existing logic for handling date clicks
+                    modalDate.textContent = info.dateStr;
 
-            <ul id="modalList">
-                <!-- js로 일정, 시간 <li> 추가 예정 -->
-            </ul>
-        </div>
-    </dialog>
-</div>
+                    const eventsOnDate = calendar.getEvents().filter(event => {
+                        const eventStart = new Date(event.start);
+                        const eventEnd = new Date(event.end);
+                        const selectedDate = new Date(info.dateStr);
+                        return (
+                            eventStart.toISOString().substring(0, 10) === info.dateStr ||
+                            (eventStart <= selectedDate && eventEnd >= selectedDate) ||
+                            eventEnd.toISOString().substring(0, 10) === info.dateStr
+                        );
+                    });
 
-<script>
-    let calendar;
+                    modalList.innerHTML = '';
 
-    document.addEventListener('DOMContentLoaded', function () {
-        // FullCalendar 초기화
-        const calendarEl = document.getElementById('calendar');
-        calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'dayGridMonth',
-            events: [],
-            eventContent: function (arg) {
-                // 달력에는 제목만 띄움
-                return {
-                    html: `${arg.event.title}`
-                };
-            },
-            dateClick: function (info) {
-                // 선택한 날짜의 일정을 가져오기
-                const selectedDate = new Date(info.dateStr);
-                const eventsOnDate = calendar.getEvents().filter(event => {
-                    const eventStart = new Date(event.start);
-                    const eventEnd = new Date(event.end);
-                    // 일정이 선택한 날짜를 포함하는 경우
-                    return (
-                        eventStart.toISOString().substring(0, 10) === info.dateStr ||
-                        (eventStart <= selectedDate && eventEnd >= selectedDate) ||
-                        eventEnd.toISOString().substring(0, 10) === info.dateStr
-                    );
-                });
+                    if (eventsOnDate.length === 0) {
+                        modalList.innerHTML = '<li>이 날짜에 등록된 일정이 없습니다.</li>';
+                    } else {
+                        eventsOnDate.forEach(event => {
+                            const listItem = document.createElement('li');
+                            const start = event.start ? `${event.start.toLocaleDateString()} ${event.start.toLocaleTimeString([], {
+                                hour: '2-digit',
+                                minute: '2-digit'
+                            })}` : '';
+                            const end = event.end ? `${event.end.toLocaleDateString()} ${event.end.toLocaleTimeString([], {
+                                hour: '2-digit',
+                                minute: '2-digit'
+                            })}` : '';
 
-                // 모달에 날짜와 요일을 추가
-                document.getElementById('modalDate').textContent = info.dateStr;
+                            listItem.innerHTML = `
+                        ${event.title} <br>
+                        시작: ${start} <br>
+                        종료: ${end}
+                        <button class="deleteBtn" data-event-id="${event.id}">삭제</button>`;
+                            modalList.appendChild(listItem);
+                        });
+                    }
 
-                // 모달에 날짜와 일정을 추가
-                const list = document.getElementById('modalList');
-                list.innerHTML = ''; // 기존 내용 삭제
-
-                // 일정이 여러 날에 걸친 경우 날짜도 표시
-                eventsOnDate.forEach(event => {
-                    const record = event.title;
-                    const startDate = event.start;
-                    const endDate = event.end;
-                    const eventId = event.id; // 이벤트 ID를 저장
-
-                    const start = startDate ? `${startDate.toLocaleDateString()} ${startDate.toLocaleTimeString([], {
-                        hour: '2-digit',
-                        minute: '2-digit'
-                    })}` : '';
-                    const end = endDate ? `${endDate.toLocaleDateString()} ${endDate.toLocaleTimeString([], {
-                        hour: '2-digit',
-                        minute: '2-digit'
-                    })}` : '';
-
-                    const item = document.createElement('li');
-                    item.innerHTML = `${record} <br> 시작: ${start} <br> 종료: ${end} <button class="deleteBtn bg-red-500 text-white px-2 py-1 rounded ml-2" data-event-id="${eventId}">삭제</button>`;
-                    list.appendChild(item);
-                });
-
-                // 모달 띄우기
-                document.getElementById('my_modal').showModal();
-            }
-        });
-        calendar.render();
-
-        // Flatpickr 초기화(범위 선택 모드)
-        flatpickr("#dateRange", {
-            mode: "range",
-            dateFormat: "Y-m-d H:i",
-            enableTime: true,
-            minuteIncrement: 1,
-        });
-    });
-
-    // + 버튼 클릭 시 기록 추가 폼 표시
-    document.getElementById('addRecord').addEventListener('click', function () {
-        document.getElementById('addRecord').classList.add('hidden');
-        document.getElementById('recordForm').classList.remove('hidden');
-    });
-
-    // 취소 버튼 클릭 시 기록 추가 폼 숨기고 + 버튼 표시
-    document.getElementById('cancelRecord').addEventListener('click', function () {
-        document.getElementById('recordForm').classList.add('hidden');
-        document.getElementById('addRecord').classList.remove('hidden');
-        // 입력 필드 초기화
-        document.getElementById('dateRange').value = '';
-        document.getElementById('record').value = '';
-    });
-
-    // 저장 버튼 클릭 시 기록을 달력에 추가
-    document.getElementById('saveRecord').addEventListener('click', function () {
-        const dateRangeInput = document.getElementById('dateRange');
-        const recordInput = document.getElementById('record');
-        const dateRange = dateRangeInput._flatpickr.selectedDates;
-
-        if (dateRange.length === 2) {
-            const startDate = dateRange[0];
-            const endDate = dateRange[1];
-            const record = recordInput.value;
-
-            if (startDate && endDate && record) {
-                if (startDate.getTime() === endDate.getTime()) {
-                    alert('시작 시간과 종료 시간을 다르게 입력해주세요.');
-                    return;
+                    modal.showModal();
                 }
+            });
 
-                calendar.addEvent({
-                    id: `${startDate.getTime()}-${endDate.getTime()}`, // 유일한 ID 생성
-                    title: record,
-                    start: startDate.toISOString(),
-                    end: endDate.toISOString(),
-                    display: 'block' // 막대로 표시
-                });
+            calendar.render();
+        });
 
-                // 입력 필드 초기화
-                dateRangeInput.value = '';
-                recordInput.value = '';
 
-                // 폼 숨기고 + 버튼 표시
-                document.getElementById('recordForm').classList.add('hidden');
-                document.getElementById('addRecord').classList.remove('hidden');
+        // + 버튼 클릭 시 기록 추가 폼 표시
+        document.getElementById('addRecord').addEventListener('click', function () {
+            document.getElementById('addRecord').classList.add('hidden');
+            document.getElementById('recordForm').classList.remove('hidden');
+        });
+
+        // 취소 버튼 클릭 시 기록 추가 폼 숨기고 + 버튼 표시
+        document.getElementById('cancelRecord').addEventListener('click', function () {
+            document.getElementById('recordForm').classList.add('hidden');
+            document.getElementById('addRecord').classList.remove('hidden');
+            // 입력 필드 초기화
+            document.getElementById('dateRange').value = '';
+            document.getElementById('record').value = '';
+        });
+
+        // 저장 버튼 클릭 시 기록을 달력에 추가
+        document.getElementById('saveRecord').addEventListener('click', function () {
+            const dateRangeInput = document.getElementById('dateRange');
+            const recordInput = document.getElementById('record');
+            const dateRange = dateRangeInput._flatpickr.selectedDates;
+
+            if (dateRange.length === 2) {
+                const startDate = dateRange[0].toISOString();
+                const endDate = dateRange[1].toISOString();
+                const title = recordInput.value;
+
+                if (title) {
+                    const event = {
+                        title: title,
+                        startDate: startDate,
+                        endDate: endDate
+                    };
+
+                    fetch('/api/events', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(event)
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            calendar.addEvent({
+                                id: data.id, // 서버에서 받은 ID를 사용
+                                title: title,
+                                start: startDate,
+                                end: endDate,
+                                display: 'block'
+                            });
+
+                            dateRangeInput.value = '';
+                            recordInput.value = '';
+
+                            document.getElementById('recordForm').classList.add('hidden');
+                            document.getElementById('addRecord').classList.remove('hidden');
+                        })
+                        .catch(error => console.error('Error saving event:', error));
+                } else {
+                    alert('일정을 입력해주세요.');
+                }
             } else {
-                alert('일정과 날짜 범위를 입력해주세요.');
+                alert('날짜 범위를 선택해주세요.');
             }
-        } else {
-            alert('날짜 범위를 올바르게 선택해주세요.');
-        }
-    });
+        });
 
-    // 모달에서 삭제 버튼 클릭 시 일정 삭제
-    document.addEventListener('click', function (e) {
-        if (e.target.classList.contains('deleteBtn')) {
-            const eventId = e.target.getAttribute('data-event-id');
-            calendar.getEvents().forEach(event => {
-                if (event.id === eventId) {
-                    event.remove();
-                }
-            });
 
-            // 모달 내용 업데이트
-            const list = document.getElementById('modalList');
-            list.innerHTML = ''; // 기존 내용 삭제
-            const eventsOnDate = calendar.getEvents().filter(event => {
-                const selectedDate = new Date(document.getElementById('modalDate').textContent);
-                const eventStart = new Date(event.start);
-                const eventEnd = new Date(event.end);
-                return (
-                    eventStart.toISOString().substring(0, 10) === selectedDate.toISOString().substring(0, 10) ||
-                    (eventStart <= selectedDate && eventEnd >= selectedDate) ||
-                    eventEnd.toISOString().substring(0, 10) === selectedDate.toISOString().substring(0, 10)
-                );
-            });
+        // 모달에서 삭제 버튼 클릭 시 일정 삭제
+        document.addEventListener('click', function (e) {
+            if (e.target.classList.contains('deleteBtn')) {
+                const eventId = e.target.getAttribute('data-event-id');
 
-            // 삭제된 이벤트 이후 목록 업데이트
-            eventsOnDate.forEach(event => {
-                const record = event.title;
-                const startDate = event.start;
-                const endDate = event.end;
-                const eventId = event.id;
+                fetch(`/api/events/${eventId}`, {
+                    method: 'DELETE'
+                })
+                    .then(() => {
+                        const event = calendar.getEventById(eventId);
+                        if (event) {
+                            event.remove();
+                        }
+                    })
+                    .catch(error => console.error('Error deleting event:', error));
+            }
+        });
 
-                const start = startDate ? `${startDate.toLocaleDateString()} ${startDate.toLocaleTimeString([], {
-                    hour: '2-digit',
-                    minute: '2-digit'
-                })}` : '';
-                const end = endDate ? `${endDate.toLocaleDateString()} ${endDate.toLocaleTimeString([], {
-                    hour: '2-digit',
-                    minute: '2-digit'
-                })}` : '';
 
-                const item = document.createElement('li');
-                item.innerHTML = `${record} <br> 시작: ${start} <br> 종료: ${end} <button class="deleteBtn bg-red-500 text-white px-2 py-1 rounded ml-2" data-event-id="${eventId}">삭제</button>`;
-                list.appendChild(item);
-            });
-
-            // 모달 업데이트
-            document.getElementById('my_modal').showModal();
-        }
-    });
-
-</script>
-</body>
+    </script>
+</div>
 </html>

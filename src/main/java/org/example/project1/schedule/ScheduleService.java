@@ -1,6 +1,7 @@
 package org.example.project1.schedule;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 import org.example.project1.DataNotFoundException;
@@ -33,5 +34,13 @@ public class ScheduleService {
 		}
 
 		scheduleRepository.delete(schedule);
+	}
+
+	public List<Schedule> getScheduleList(SiteUser user) {
+		return scheduleRepository.findAll()
+			.stream()
+			.filter(x -> x.getUser().equals(user))
+			.filter(x -> x.getStartDate() != null)
+			.toList();
 	}
 }

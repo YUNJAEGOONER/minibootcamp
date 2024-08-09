@@ -1,11 +1,11 @@
 package org.example.project1.config;
 
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -20,16 +20,17 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http.authorizeHttpRequests((requests) -> requests
-				.requestMatchers(new AntPathRequestMatcher("/**")).permitAll())
-			.csrf((csrf) -> csrf
-				.ignoringRequestMatchers(PathRequest.toH2Console()))
+				.requestMatchers("/api/**").authenticated()
+				.anyRequest().permitAll())
+			// .csrf((csrf) -> csrf
+			// 	.ignoringRequestMatchers(PathRequest.toH2Console()))
+			.csrf(AbstractHttpConfigurer::disable)
 			.headers((headers) -> headers
 				.addHeaderWriter(new XFrameOptionsHeaderWriter(
 					XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN)))
 			.formLogin((formLogin) -> formLogin
 				.loginPage("/user/login")
-				.defaultSuccessUrl("/home/main")
-			)
+				.defaultSuccessUrl("/home/main"))
 			.logout((logout) -> logout
 				.logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
 				.logoutSuccessUrl("/")
