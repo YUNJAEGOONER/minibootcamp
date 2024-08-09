@@ -29,6 +29,6 @@ public class HomeController {
 		}
 		Page<Question> hotList = questionService.getTop5HotList();
 		model.addAttribute("questions", hotList);
-		return "home";
+		return "calendar";
 	}
 }

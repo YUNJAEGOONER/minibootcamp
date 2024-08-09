@@ -25,14 +25,15 @@
     <script src="https://cdn.tailwindcss.com"></script>
 
 
+    <main class="flex flex-grow flex-col items-center justify-center w-full">
     <div class="flex flex-col flex-grow items-center justify-center">
         <!-- 달력 표시 영역 -->
         <div id="calendar" class="flex w-full max-w-md mb-4 overflow-auto"></div>
 
-        <!-- + 버튼 눌렀을 때 + 버튼 사라지고 일정 입력 div가 뜨도록 js 구현 -->
-        <button id="addRecord" class="btn btn-circle">
-            <i class="fa-solid fa-plus"></i>
-        </button>
+<!--        &lt;!&ndash; + 버튼 눌렀을 때 + 버튼 사라지고 일정 입력 div가 뜨도록 js 구현 &ndash;&gt;-->
+<!--        <button id="addRecord" class="btn btn-circle">-->
+<!--            <i class="fa-solid fa-plus"></i>-->
+<!--        </button>-->
 
         <!-- 기록 추가 영역 (처음에는 숨김) -->
         <div id="recordForm" class="hidden bg-white p-4 rounded shadow-md">
@@ -63,6 +64,39 @@
         </dialog>
     </div>
 
+    <div class="w-full max-w-md mt-8">
+        <div class="flex items-center justify-between p-2 border-b">
+            <span class="font-semibold">HOT게시판</span>
+            <a
+                    class="font-semibold flex items-center">
+                더보기
+                <i class="fa-solid fa-angle-right"></i>
+            </a>
+        </div>
+
+        <div class="w-full border-collapse" th:each="question, loop : ${questions}">
+            <table class="table" >
+                <tbody>
+                <tr th:onclick="|location.href='@{|/question/detail/${question.id}|}'|">
+                    <td class="w-1/2 word_title" th:utext="${question.subject}"></td>
+
+                    <td class="w-1/4" style="text-align: right">
+                        <i class="fa-regular fa-heart"></i>
+                        <span th:text="${#lists.size(question.voter)}"></span>
+                    </td>
+
+                    <td class="w-1/4" style="text-align: right">
+                        <i class="fa-regular fa-comment"></i>
+                        <span th:text="|${#lists.size(question.answerList)}|"></span>
+                    </td>
+
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+    </main>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const calendarEl = document.getElementById('calendar');
